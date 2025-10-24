@@ -31,12 +31,17 @@ export interface PokemonSpecies {
   }>;
 }
 
+export enum GameStatus {
+  PLAYING = 'playing',
+  WON = 'won',
+  LOST = 'lost',
+}
+
 export interface GameState {
   targetPokemon: Pokemon | null;
   attempts: string[];
   currentAttempt: string;
-  gameOver: boolean;
-  won: boolean;
+  status: GameStatus;
   blurLevel: number; // 0-5, where 0 is fully blurred, 5 is clear
 }
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { type Pokemon, type GameState, type LetterState } from '@/types/pokemon';
+import { type Pokemon, type GameState, type LetterState, GameStatus } from '@/types/pokemon';
 import { type PokemonGeneration, DEFAULT_GENERATION } from '@/data/pokemonGenerations';
 
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2';
@@ -9,8 +9,7 @@ export function usePokemonGame() {
     targetPokemon: null,
     attempts: [],
     currentAttempt: '',
-    gameOver: false,
-    won: false,
+    status: GameStatus.PLAYING,
     blurLevel: 0,
   });
 
@@ -63,8 +62,7 @@ export function usePokemonGame() {
         targetPokemon: pokemon,
         attempts: [],
         currentAttempt: '',
-        gameOver: false,
-        won: false,
+        status: GameStatus.PLAYING,
         blurLevel: 0,
       });
     } catch (err) {
@@ -112,7 +110,14 @@ export function usePokemonGame() {
     
     const newAttempts = [...gameState.attempts, guess];
     const isCorrect = normalizedGuess === target;
-    const isGameOver = isCorrect || newAttempts.length >= 5;
+    
+    // Determine game status
+    let newStatus = GameStatus.PLAYING;
+    if (isCorrect) {
+      newStatus = GameStatus.WON;
+    } else if (newAttempts.length >= 5) {
+      newStatus = GameStatus.LOST;
+    }
     
     // Calculate new blur level (0-5, where 5 is clear)
     const newBlurLevel = Math.min(5, newAttempts.length);
@@ -121,8 +126,7 @@ export function usePokemonGame() {
       ...prev,
       attempts: newAttempts,
       currentAttempt: '',
-      gameOver: isGameOver,
-      won: isCorrect,
+      status: newStatus,
       blurLevel: newBlurLevel,
     }));
   }, [gameState.targetPokemon, gameState.attempts]);

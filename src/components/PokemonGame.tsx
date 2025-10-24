@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { usePokemonGame } from '@/hooks/usePokemonGame';
-import { PokemonImage } from './PokemonImage';
-import { GuessInput } from './GuessInput';
-import { AttemptDisplay } from './AttemptDisplay';
-import { GenerationSelectorButton } from './GenerationSelectorButton';
-import { CongratulationsModal } from './CongratulationsModal';
+import { GameStatus } from '@/types/pokemon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
+import { CongratulationsModal } from './CongratulationsModal';
+import { GenerationSelectorButton } from './GenerationSelectorButton';
+import { AttemptDisplay } from './AttemptDisplay';
+import { PokemonImage } from './PokemonImage';
+import { GuessInput } from './GuessInput';
+import { GameOver } from './GameOver';
+import { PokemonInfos } from './PokemonInfos';
 
 export function PokemonGame() {
   const {
@@ -16,7 +18,6 @@ export function PokemonGame() {
     loading,
     error,
     submitGuess,
-    updateCurrentAttempt,
     restartGame,
     handleGenerationChange,
   } = usePokemonGame();
@@ -33,11 +34,11 @@ export function PokemonGame() {
   };
 
   // Show congratulations modal when game is won
-  React.useEffect(() => {
-    if (gameState.won && gameState.gameOver) {
+  useEffect(() => {
+    if (gameState.status === GameStatus.WON) {
       setShowCongratulations(true);
     }
-  }, [gameState.won, gameState.gameOver]);
+  }, [gameState.status]);
 
   if (loading) {
     return (
@@ -94,19 +95,12 @@ export function PokemonGame() {
       <PokemonImage 
         pokemon={gameState.targetPokemon} 
         blurLevel={gameState.blurLevel}
-        gameOver={gameState.gameOver}
+        gameOver={gameState.status !== GameStatus.PLAYING}
       />
 
       {/* Game Over Status (only for lose) */}
-      {gameState.gameOver && !gameState.won && (
-        <Card className="border-red-500 bg-red-50 dark:bg-red-950">
-          <CardContent className="p-4 text-center">
-            <div className="text-red-600 dark:text-red-400">
-              <div className="text-2xl font-bold mb-2">😞 Game Over</div>
-              <div>Le Pokemon était <strong>{gameState.targetPokemon?.frenchName}</strong></div>
-            </div>
-          </CardContent>
-        </Card>
+      {gameState.status === GameStatus.LOST && (
+        <GameOver pokemon={gameState.targetPokemon} />
       )}
 
       {/* Attempt Display */}
@@ -116,23 +110,23 @@ export function PokemonGame() {
       />
 
       {/* Guess Input */}
-      {!gameState.gameOver && (
+      {gameState.status === GameStatus.PLAYING && (
         <GuessInput 
           onSubmit={handleGuessSubmit}
-          disabled={gameState.gameOver}
+          disabled={gameState.status !== GameStatus.PLAYING}
           maxLength={gameState.targetPokemon?.frenchName.length}
         />
       )}
 
       {/* Game Controls */}
       <div className="flex justify-center gap-4">
-        {gameState.gameOver && (
+        {gameState.status !== GameStatus.PLAYING && (
           <Button onClick={restartGame} variant="default" size="lg">
             Play Again
           </Button>
         )}
         
-        {!gameState.gameOver && (
+        {gameState.status === GameStatus.PLAYING && (
           <div className="text-center text-muted-foreground">
             Attempts: {gameState.attempts.length}/5
           </div>
@@ -140,35 +134,8 @@ export function PokemonGame() {
       </div>
 
       {/* Pokemon Info (shown when game is over) */}
-      {gameState.gameOver && gameState.targetPokemon && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Pokemon Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-semibold mb-2">Basic Info</h4>
-                <p><strong>Name:</strong> {gameState.targetPokemon.frenchName}</p>
-                <p><strong>Height:</strong> {gameState.targetPokemon.height / 10}m</p>
-                <p><strong>Weight:</strong> {gameState.targetPokemon.weight / 10}kg</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-2">Types</h4>
-                <div className="flex gap-2">
-                  {gameState.targetPokemon.types.map((type, index) => (
-                    <span 
-                      key={index}
-                      className="px-2 py-1 bg-primary text-primary-foreground rounded text-sm"
-                    >
-                      {type.type.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {gameState.status !== GameStatus.PLAYING && gameState.targetPokemon && (
+        <PokemonInfos pokemon={gameState.targetPokemon} />
       )}
 
       {/* Congratulations Modal */}
