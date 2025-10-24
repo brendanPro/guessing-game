@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { type LetterState } from '@/types/pokemon';
+import { LetterState } from '@/types/pokemon';
 
 interface AttemptDisplayProps {
   attempts: string[];
@@ -10,25 +10,25 @@ interface AttemptDisplayProps {
 
 export function AttemptDisplay({ attempts, targetPokemon, className }: AttemptDisplayProps) {
   const getLetterStates = (guess: string): LetterState[] => {
-    const result: LetterState[] = new Array(targetPokemon.length).fill('absent');
+    const result: LetterState[] = new Array(targetPokemon.length).fill(LetterState.ABSENT);
     const targetLetters = targetPokemon.toLowerCase().split('');
     const guessLetters = guess.toLowerCase().split('');
     
     // First pass: mark correct letters
     for (let i = 0; i < Math.min(guessLetters.length, targetLetters.length); i++) {
       if (guessLetters[i] === targetLetters[i]) {
-        result[i] = 'correct';
+        result[i] = LetterState.CORRECT;
         targetLetters[i] = ''; // Mark as used
       }
     }
     
     // Second pass: mark present letters
     for (let i = 0; i < Math.min(guessLetters.length, targetLetters.length); i++) {
-      if (result[i] === 'correct') continue;
+      if (result[i] === LetterState.CORRECT) continue;
       
       const targetIndex = targetLetters.indexOf(guessLetters[i]);
       if (targetIndex !== -1) {
-        result[i] = 'present';
+        result[i] = LetterState.PRESENT;
         targetLetters[targetIndex] = ''; // Mark as used
       }
     }
@@ -38,11 +38,11 @@ export function AttemptDisplay({ attempts, targetPokemon, className }: AttemptDi
 
   const getLetterClassName = (state: LetterState) => {
     switch (state) {
-      case 'correct':
+      case LetterState.CORRECT:
         return 'bg-green-500 text-white';
-      case 'present':
+      case LetterState.PRESENT:
         return 'bg-yellow-500 text-white';
-      case 'absent':
+      case LetterState.ABSENT:
         return 'bg-gray-500 text-white';
       default:
         return 'bg-gray-200 text-gray-800';
@@ -60,7 +60,7 @@ export function AttemptDisplay({ attempts, targetPokemon, className }: AttemptDi
         <div className="space-y-2">
           {Array.from({ length: totalRows }, (_, rowIndex) => {
             const attempt = attempts[rowIndex];
-            const letterStates = attempt ? getLetterStates(attempt) : new Array(targetLength).fill('absent');
+            const letterStates = attempt ? getLetterStates(attempt) : new Array(targetLength).fill(LetterState.ABSENT);
             
             return (
               <div key={rowIndex} className="flex gap-1 sm:gap-1 justify-center">

@@ -45,4 +45,8 @@ export interface GameState {
   blurLevel: number; // 0-5, where 0 is fully blurred, 5 is clear
 }
 
-export type LetterState = 'correct' | 'present' | 'absent';
+export enum LetterState {
+  CORRECT = 'correct',
+  PRESENT = 'present',
+  ABSENT = 'absent',
+}

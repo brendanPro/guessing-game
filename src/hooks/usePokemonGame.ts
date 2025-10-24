@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { type Pokemon, type GameState, type LetterState, GameStatus } from '@/types/pokemon';
+import { type Pokemon, type GameState, LetterState, GameStatus } from '@/types/pokemon';
 import { type PokemonGeneration, DEFAULT_GENERATION } from '@/data/pokemonGenerations';
 
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2';
@@ -51,13 +51,11 @@ export function usePokemonGame() {
 
   // Initialize game
   const initializeGame = useCallback(async () => {
-    console.log('🚀 Initializing game...');
     setLoading(true);
     setError(null);
     
     try {
       const pokemon = await getRandomPokemon();
-      console.log('✅ Game initialized successfully');
       setGameState({
         targetPokemon: pokemon,
         attempts: [],
@@ -66,7 +64,6 @@ export function usePokemonGame() {
         blurLevel: 0,
       });
     } catch (err) {
-      console.error('❌ Game initialization failed:', err);
       setError(err instanceof Error ? err.message : 'Failed to initialize game');
     } finally {
       setLoading(false);
@@ -75,25 +72,25 @@ export function usePokemonGame() {
 
   // Check if guess is correct
   const checkGuess = (guess: string, target: string): LetterState[] => {
-    const result: LetterState[] = new Array(guess.length).fill('absent');
+    const result: LetterState[] = new Array(guess.length).fill(LetterState.ABSENT);
     const targetLetters = target.toLowerCase().split('');
     const guessLetters = guess.toLowerCase().split('');
     
     // First pass: mark correct letters
     for (let i = 0; i < guessLetters.length; i++) {
       if (guessLetters[i] === targetLetters[i]) {
-        result[i] = 'correct';
+        result[i] = LetterState.CORRECT;
         targetLetters[i] = ''; // Mark as used
       }
     }
     
     // Second pass: mark present letters
     for (let i = 0; i < guessLetters.length; i++) {
-      if (result[i] === 'correct') continue;
+      if (result[i] === LetterState.CORRECT) continue;
       
       const targetIndex = targetLetters.indexOf(guessLetters[i]);
       if (targetIndex !== -1) {
-        result[i] = 'present';
+        result[i] = LetterState.PRESENT;
         targetLetters[targetIndex] = ''; // Mark as used
       }
     }
