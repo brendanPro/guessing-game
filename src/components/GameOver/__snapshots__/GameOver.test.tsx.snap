@@ -1,0 +1,7 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameOver Component snapshot with Pikachu 1`] = `"<div data-slot="card" class="text-card-foreground rounded-xl border shadow-sm border-red-500 bg-red-50 dark:bg-red-950"><div data-slot="card-content" class="p-4 text-center"><div class="text-red-600 dark:text-red-400"><div class="text-2xl font-bold mb-2">😞 Game Over</div><div>Le Pokemon était <strong>Pikachu</strong></div></div></div></div>"`;
+
+exports[`GameOver Component snapshot with Charizard (French name) 1`] = `"<div data-slot="card" class="text-card-foreground rounded-xl border shadow-sm border-red-500 bg-red-50 dark:bg-red-950"><div data-slot="card-content" class="p-4 text-center"><div class="text-red-600 dark:text-red-400"><div class="text-2xl font-bold mb-2">😞 Game Over</div><div>Le Pokemon était <strong>Dracaufeu</strong></div></div></div></div>"`;
+
+exports[`GameOver Component snapshot with null pokemon 1`] = `"<div data-slot="card" class="text-card-foreground rounded-xl border shadow-sm border-red-500 bg-red-50 dark:bg-red-950"><div data-slot="card-content" class="p-4 text-center"><div class="text-red-600 dark:text-red-400"><div class="text-2xl font-bold mb-2">😞 Game Over</div><div>Le Pokemon était <strong></strong></div></div></div></div>"`;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalFooter } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
 import { type Pokemon } from '@/types/pokemon';

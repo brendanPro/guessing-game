@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { type LetterState } from '@/types/pokemon';
 
 interface GuessInputProps {
   onSubmit: (guess: string) => void;
