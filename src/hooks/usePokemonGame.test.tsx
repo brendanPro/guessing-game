@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, mock, afterAll } from "bun:test";
 import { GameStatus, LetterState } from "@/types/pokemon";
 import { usePokemonGame } from "./usePokemonGame";
-import { renderHook, waitFor, type RenderHookResult, type RenderResult } from "@testing-library/react";
+import { renderHook, waitFor, act  } from "@testing-library/react";
 import { DEFAULT_GENERATION } from "@/data/pokemonGenerations";
 
 // Mock Pokemon data
@@ -138,7 +138,9 @@ describe("usePokemonGame hook", () => {
   describe("update current attempt", () => {
     test("should update the current attempt", async () => {
       const { result } = renderHook(() => usePokemonGame());
-      result.current.updateCurrentAttempt("pikachu");
+      act(() => {
+        result.current.updateCurrentAttempt("pikachu");
+      });
       await waitFor(() => { 
         expect(result.current.gameState.currentAttempt).toBe("pikachu");
       });
@@ -177,7 +179,9 @@ describe("usePokemonGame hook", () => {
     });
 
     test("should submit a correct guess on first attempt", async () => {
-      result.current.submitGuess('pikachu');
+      act(() => {
+        result.current.submitGuess('pikachu');
+      });
       await waitFor(() => {
         expect(result.current.gameState.status).toBe(GameStatus.WON);
         expect(result.current.gameState.attempts).toEqual(["pikachu"]);
@@ -187,7 +191,9 @@ describe("usePokemonGame hook", () => {
     });
 
     test("should submit an incorrect guess and continue playing", async () => {
-      result.current.submitGuess('bulbizarre');
+      act(() => {
+        result.current.submitGuess('bulbizarre');
+      });
       await waitFor(() => {
         expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
         expect(result.current.gameState.attempts).toEqual(["bulbizarre"]);
@@ -204,7 +210,9 @@ describe("usePokemonGame hook", () => {
         }
       }
       for await (const i of asyncGenerator()) {
-        result.current.submitGuess('bulbizarre');
+        act(() => {
+          result.current.submitGuess('bulbizarre');
+        });
         await waitFor(() => {
           expect(result.current.gameState.attempts).toEqual(new Array(i+1).fill("bulbizarre"));
         });
@@ -248,14 +256,18 @@ describe("usePokemonGame hook", () => {
 
 
     test("should restart the game after winning", async () => {
-      result.current.submitGuess('pikachu');
+      act(() => {
+        result.current.submitGuess('pikachu');
+      });
       await waitFor(() => {
         expect(result.current.gameState.status).toBe(GameStatus.WON);
         expect(result.current.gameState.attempts).toEqual(["pikachu"]);
         expect(result.current.gameState.currentAttempt).toBe("");
         expect(result.current.gameState.blurLevel).toBe(1);
       });
-      result.current.restartGame();
+      act(() => {
+        result.current.restartGame();
+      });
       await waitFor(() => {
         expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
         expect(result.current.gameState.attempts).toEqual([]);
