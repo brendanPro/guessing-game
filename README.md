@@ -35,9 +35,45 @@ bun run preview
 - **[Shadcn/ui](https://ui.shadcn.com/)** - Re-usable components
 - **[PokéAPI](https://pokeapi.co/)** - Pokemon data
 
+## 🧪 Testing
+
+### Run Tests
+```bash
+bun test
+```
+
+### Watch Mode
+```bash
+bun test:watch
+```
+
+### Coverage
+```bash
+bun test --coverage
+```
+
+The project includes comprehensive tests:
+- ✅ **20 tests** across 2 test files
+- ✅ **Component snapshot tests** (GameOver)
+- ✅ **Custom hook tests** (usePokemonGame)
+- ✅ **86 expect() calls** ensuring functionality
+
+## 🚀 Deployment
+
+Deploy to [Netlify](https://netlify.com) with automatic testing:
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy)
+
+The project is configured to:
+1. ✅ Run all tests before build
+2. ✅ Fail deployment if tests fail
+3. ✅ Auto-deploy on Git push
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
 ## 📚 Documentation
 
-- [Vite Setup Guide](./VITE_SETUP.md) - Vite configuration and usage
+- [Deployment Guide](./DEPLOYMENT.md) - Netlify deployment with automatic testing
 - [Agents Best Practices](./AGENTS.md) - React, Shadcn, and Tailwind best practices
 
 ## 🎮 Game Features

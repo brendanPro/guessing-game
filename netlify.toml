@@ -1,0 +1,39 @@
+# Netlify Configuration
+[build]
+  # Install Bun, run tests, then build
+  command = """
+    curl -fsSL https://bun.sh/install | bash && \
+    export BUN_INSTALL="$HOME/.bun" && \
+    export PATH="$BUN_INSTALL/bin:$PATH" && \
+    bun install && \
+    bun test && \
+    bun run build
+  """
+  
+  # The directory where your build outputs (Vite default)
+  publish = "dist"
+  
+  # Environment variables for build
+  [build.environment]
+    # Use Node 20.x (required for Bun compatibility)
+    NODE_VERSION = "20"
+
+# Install Bun before running commands
+[build.processing]
+  skip_processing = false
+
+# Custom headers for security (optional but recommended)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Redirect rules (optional - for SPA routing)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
