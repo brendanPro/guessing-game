@@ -70,11 +70,18 @@ export function usePokemonGame() {
     }
   }, [selectedGeneration]);
 
+  // Normalize string by removing accents
+  const normalizeString = (str: string): string => {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  };
+
   // Check if guess is correct
   const checkGuess = (guess: string, target: string): LetterState[] => {
     const result: LetterState[] = new Array(guess.length).fill(LetterState.ABSENT);
-    const targetLetters = target.toLowerCase().split('');
-    const guessLetters = guess.toLowerCase().split('');
+    const normalizedTarget = normalizeString(target.toLowerCase());
+    const normalizedGuess = normalizeString(guess.toLowerCase());
+    const targetLetters = normalizedTarget.split('');
+    const guessLetters = normalizedGuess.split('');
     
     // First pass: mark correct letters
     for (let i = 0; i < guessLetters.length; i++) {
@@ -102,11 +109,11 @@ export function usePokemonGame() {
   const submitGuess = useCallback((guess: string) => {
     if (!gameState.targetPokemon || guess.length === 0) return;
     
-    const normalizedGuess = guess.toLowerCase();
-    const target = gameState.targetPokemon.frenchName.toLowerCase();
+    const target = gameState.targetPokemon.frenchName;
+    const letterStates = checkGuess(guess, target);
     
     const newAttempts = [...gameState.attempts, guess];
-    const isCorrect = normalizedGuess === target;
+    const isCorrect = letterStates.every(state => state === LetterState.CORRECT);
     
     // Determine game status
     let newStatus = GameStatus.PLAYING;

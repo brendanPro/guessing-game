@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach, afterEach, mock, afterAll } from "bun:test";
+import { describe, test, expect, beforeEach, afterEach, mock } from "bun:test";
 import { GameStatus, LetterState } from "@/types/pokemon";
 import { usePokemonGame } from "./usePokemonGame";
 import { renderHook, waitFor, act  } from "@testing-library/react";
@@ -110,28 +110,50 @@ describe("usePokemonGame hook", () => {
   });
 
   describe("check guess", () => {
-    test("guss should be correct", () => {
+    test("guess should be correct", () => {
       const { result } = renderHook(() => usePokemonGame());
-      const guess = "pikachu";
       const target = "pikachu";
+      const guess = "pikachu";
       const resultGuess = result.current.checkGuess(guess, target);
       expect(resultGuess).toEqual(new Array(guess.length).fill(LetterState.CORRECT));
     });
 
-    test("guss should be present", () => {
+    test("guess should be present", () => {
       const { result } = renderHook(() => usePokemonGame());
-      const guess = "bulbizarre";
       const target = "bulbizarre";
+      const guess = "bulbizarre";
       const resultGuess = result.current.checkGuess(guess, target.split('').reverse().join(''));
       expect(resultGuess).toEqual(new Array(guess.length).fill(LetterState.PRESENT));
     });
 
-    test("guss should be absent", () => {
+    test("guess should be absent", () => {
       const { result } = renderHook(() => usePokemonGame());
-      const guess = "pikachu";
-      const target = "qjlbdjv";
+      const target = "pikachu";
+      const guess = "qjlbdjv";
       const resultGuess = result.current.checkGuess(guess, target);
       expect(resultGuess).toEqual(new Array(guess.length).fill(LetterState.ABSENT));
+    });
+
+    test("guess should ignore accent", ()=>{
+      const { result } = renderHook(() => usePokemonGame());
+      
+      // Test with é -> e
+      const target1 = "évoli"
+      const guess1 = "evoli";
+      const resultGuess1 = result.current.checkGuess(guess1, target1);
+      expect(resultGuess1).toEqual(new Array(guess1.length).fill(LetterState.CORRECT));
+      
+      // Test with è, é, ê -> e
+      const target2 = "flabébé"
+      const guess2 = "flabebe";
+      const resultGuess2 = result.current.checkGuess(guess2, target2);
+      expect(resultGuess2).toEqual(new Array(guess2.length).fill(LetterState.CORRECT));
+      
+      // Test with à -> a
+      const target3 = "maràcacrin"
+      const guess3 = "maracacrin";
+      const resultGuess3 = result.current.checkGuess(guess3, target3);
+      expect(resultGuess3).toEqual(new Array(guess3.length).fill(LetterState.CORRECT));
     });
   });
 
