@@ -1,79 +1,8 @@
 import { describe, test, expect, beforeAll } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { GameOver } from "./GameOver";
-import type { Pokemon } from "@/types/pokemon";
+import { mockCharizard, mockPikachu} from './mock-data'
 
-// Mock data
-const mockPikachu: Pokemon = {
-  id: 25,
-  name: "pikachu",
-  frenchName: "Pikachu",
-  sprites: {
-    front_default:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png",
-    back_default:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/25.png",
-    front_shiny:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/25.png",
-    back_shiny:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/25.png",
-  },
-  types: [
-    {
-      type: {
-        name: "electric",
-      },
-    },
-  ],
-  height: 4,
-  weight: 60,
-  stats: [
-    {
-      base_stat: 35,
-      stat: {
-        name: "hp",
-      },
-    },
-  ],
-};
-
-const mockCharizard: Pokemon = {
-  id: 6,
-  name: "charizard",
-  frenchName: "Dracaufeu",
-  sprites: {
-    front_default:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png",
-    back_default:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/6.png",
-    front_shiny:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/6.png",
-    back_shiny:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/6.png",
-  },
-  types: [
-    {
-      type: {
-        name: "fire",
-      },
-    },
-    {
-      type: {
-        name: "flying",
-      },
-    },
-  ],
-  height: 17,
-  weight: 905,
-  stats: [
-    {
-      base_stat: 78,
-      stat: {
-        name: "hp",
-      },
-    },
-  ],
-};
 
 describe("GameOver Component", () => {
   test("snapshot with Pikachu", () => {
