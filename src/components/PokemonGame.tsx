@@ -9,7 +9,7 @@ import { AttemptDisplay } from './AttemptDisplay';
 import { PokemonImage } from './PokemonImage';
 import { GuessInput } from './GuessInput';
 import { GameOver } from './GameOver';
-import { PokemonInfos } from './PokemonInfos/PokemonInfos';
+import { PokemonInfos } from './PokemonInfos';
 
 export function PokemonGame() {
   const {
