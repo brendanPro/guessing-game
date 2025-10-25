@@ -47,7 +47,6 @@ export interface GameState {
   attempts: string[];
   currentAttempt: string;
   status: GameStatus;
-  blurLevel: number; // 0-5, where 0 is fully blurred/zoomed, 5 is clear/normal
   gameMode: GameMode;
 }
 

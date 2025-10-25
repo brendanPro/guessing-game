@@ -4,7 +4,7 @@ import { PokemonGame } from "./components/PokemonGame";
 export function App() {
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-8">
+      <div className="container mx-auto p-2">
         <PokemonGame />
       </div>
     </div>

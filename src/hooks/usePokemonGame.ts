@@ -15,7 +15,16 @@ export function usePokemonGame() {
   });
 
   const [selectedGeneration, setSelectedGeneration] = useState<PokemonGeneration>(DEFAULT_GENERATION);
-  const [gameMode, setGameMode] = useState<GameMode>(GameMode.BLUR);
+  // Initialize gameMode from localStorage or default to BLUR
+  const [gameMode, setGameMode] = useState<GameMode>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('pokemon-game-mode');
+      return saved && Object.values(GameMode).includes(saved as GameMode) 
+        ? (saved as GameMode) 
+        : GameMode.BLUR;
+    }
+    return GameMode.BLUR;
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -63,7 +72,6 @@ export function usePokemonGame() {
         attempts: [],
         currentAttempt: '',
         status: GameStatus.PLAYING,
-        blurLevel: 0,
         gameMode: gameMode,
       });
     } catch (err) {
@@ -126,15 +134,11 @@ export function usePokemonGame() {
       newStatus = GameStatus.LOST;
     }
     
-    // Calculate new blur level (0-5, where 5 is clear)
-    const newBlurLevel = Math.min(5, newAttempts.length);
-    
     setGameState(prev => ({
       ...prev,
       attempts: newAttempts,
       currentAttempt: '',
       status: newStatus,
-      blurLevel: newBlurLevel,
     }));
   }, [gameState.targetPokemon, gameState.attempts]);
 
@@ -165,11 +169,19 @@ export function usePokemonGame() {
   // Handle mode change
   const handleModeChange = useCallback((mode: GameMode) => {
     setGameMode(mode);
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('pokemon-game-mode', mode);
+    }
     restartGame();
   }, [restartGame]);
 
+  // Compute effect level from attempts (0-5, where 5 is clear/normal)
+  const effectLevel = Math.min(5, gameState.attempts.length);
+
   return {
     gameState,
+    effectLevel,
     selectedGeneration,
     gameMode,
     loading,

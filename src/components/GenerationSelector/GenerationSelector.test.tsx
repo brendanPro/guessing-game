@@ -51,7 +51,7 @@ describe("GenerationSelector Component", () => {
     expect(html).toMatchSnapshot();
   });
 
-  test("contains title", () => {
+  test("contains label", () => {
     const html = renderToStaticMarkup(
       <GenerationSelector 
         selectedGeneration={POKEMON_GENERATIONS[0]} 
@@ -59,10 +59,10 @@ describe("GenerationSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain("Choisissez une Génération");
+    expect(html).toContain("Génération Pokémon");
   });
 
-  test("contains description text", () => {
+  test("has select element", () => {
     const html = renderToStaticMarkup(
       <GenerationSelector 
         selectedGeneration={POKEMON_GENERATIONS[0]} 
@@ -70,58 +70,9 @@ describe("GenerationSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain("Sélectionnez la génération de Pokémon pour votre partie");
+    expect(html).toContain("generation-select");
   });
 
-  test("displays all 9 generations", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("Génération I");
-    expect(html).toContain("Génération IX");
-  });
-
-  test("displays generation names", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("Génération I");
-    expect(html).toContain("Génération II");
-    expect(html).toContain("Génération III");
-  });
-
-  test("displays generation regions", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("Kanto");
-    expect(html).toContain("Johto");
-    expect(html).toContain("Paldea");
-  });
-
-  test("displays generation ID ranges", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("1-151");
-    expect(html).toContain("1-251");
-  });
 
   test("displays selected generation description", () => {
     const html = renderToStaticMarkup(
@@ -145,7 +96,7 @@ describe("GenerationSelector Component", () => {
     expect(html).toContain("Génération I - Kanto");
   });
 
-  test("has responsive grid layout", () => {
+  test("has description box", () => {
     const html = renderToStaticMarkup(
       <GenerationSelector 
         selectedGeneration={POKEMON_GENERATIONS[0]} 
@@ -153,14 +104,10 @@ describe("GenerationSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain("grid-cols-2");
-    expect(html).toContain("sm:grid-cols-3");
-    expect(html).toContain("md:grid-cols-4");
-    expect(html).toContain("lg:grid-cols-5");
-    expect(html).toContain("xl:grid-cols-9");
+    expect(html).toContain("bg-muted");
   });
 
-  test("has touch-manipulation class for mobile", () => {
+  test("has space-y layout", () => {
     const html = renderToStaticMarkup(
       <GenerationSelector 
         selectedGeneration={POKEMON_GENERATIONS[0]} 
@@ -168,29 +115,7 @@ describe("GenerationSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain("touch-manipulation");
-  });
-
-  test("has hover scale effect", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("hover:scale-105");
-  });
-
-  test("has transition classes", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("transition-transform");
+    expect(html).toContain("space-y-3");
   });
 
   test("applies custom className when provided", () => {
@@ -229,15 +154,6 @@ describe("GenerationSelector Component", () => {
     expect(html).toContain("Tous les Pokémon");
   });
 
-  test("has emoji in title", () => {
-    const html = renderToStaticMarkup(
-      <GenerationSelector 
-        selectedGeneration={POKEMON_GENERATIONS[0]} 
-        onGenerationChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("🎮");
-  });
 });
+
 

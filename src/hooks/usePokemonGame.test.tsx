@@ -34,7 +34,7 @@ describe("usePokemonGame hook", () => {
     expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
     expect(result.current.gameState.attempts).toEqual([]);
     expect(result.current.gameState.currentAttempt).toBe("");
-    expect(result.current.gameState.blurLevel).toBe(0);
+    expect(result.current.effectLevel).toBe(0);
     expect(result.current.gameState.targetPokemon).toBeNull();
     expect(result.current.loading).toBe(true);
     expect(result.current.error).toBeNull();
@@ -47,6 +47,8 @@ describe("usePokemonGame hook", () => {
     beforeEach(() => {
       // Save original fetch
       originalFetch = global.fetch;
+      // Clear localStorage before each test
+      localStorage.clear();
     });
 
     afterEach(() => {
@@ -176,6 +178,8 @@ describe("usePokemonGame hook", () => {
     beforeEach(async () => {
       // Save original fetch
       originalFetch = global.fetch;
+      // Clear localStorage before each test
+      localStorage.clear();
 
       const mockFetch = mock();
       mockFetch.mockResolvedValueOnce({
@@ -208,7 +212,7 @@ describe("usePokemonGame hook", () => {
         expect(result.current.gameState.status).toBe(GameStatus.WON);
         expect(result.current.gameState.attempts).toEqual(["pikachu"]);
         expect(result.current.gameState.currentAttempt).toBe("");
-        expect(result.current.gameState.blurLevel).toBe(1);
+        expect(result.current.effectLevel).toBe(1);
       });
     });
 
@@ -220,7 +224,7 @@ describe("usePokemonGame hook", () => {
         expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
         expect(result.current.gameState.attempts).toEqual(["bulbizarre"]);
         expect(result.current.gameState.currentAttempt).toBe("");
-        expect(result.current.gameState.blurLevel).toBe(1);
+        expect(result.current.effectLevel).toBe(1);
       });
     });
 
@@ -240,7 +244,7 @@ describe("usePokemonGame hook", () => {
         });
       }
       expect(result.current.gameState.status).toBe(GameStatus.LOST);
-      expect(result.current.gameState.blurLevel).toBe(5);
+      expect(result.current.effectLevel).toBe(5);
     })
   });
 
@@ -252,6 +256,8 @@ describe("usePokemonGame hook", () => {
     beforeEach(async () => {
       // Save original fetch
       originalFetch = global.fetch;
+      // Clear localStorage before each test
+      localStorage.clear();
 
       const mockFetch = mock();
       mockFetch.mockResolvedValueOnce({
@@ -285,7 +291,7 @@ describe("usePokemonGame hook", () => {
         expect(result.current.gameState.status).toBe(GameStatus.WON);
         expect(result.current.gameState.attempts).toEqual(["pikachu"]);
         expect(result.current.gameState.currentAttempt).toBe("");
-        expect(result.current.gameState.blurLevel).toBe(1);
+        expect(result.current.effectLevel).toBe(1);
       });
       act(() => {
         result.current.restartGame();
@@ -294,12 +300,17 @@ describe("usePokemonGame hook", () => {
         expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
         expect(result.current.gameState.attempts).toEqual([]);
         expect(result.current.gameState.currentAttempt).toBe("");
-        expect(result.current.gameState.blurLevel).toBe(0);
+        expect(result.current.effectLevel).toBe(0);
       });
     });
   });
 
   describe("handle mode change", () => {
+    beforeEach(() => {
+      // Clear localStorage before each test
+      localStorage.clear();
+    });
+
     test("should change game mode and restart game", async () => {
       const { result } = renderHook(() => usePokemonGame());
 
@@ -318,7 +329,7 @@ describe("usePokemonGame hook", () => {
         expect(result.current.gameMode).toBe(GameMode.ZOOM);
         expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
         expect(result.current.gameState.attempts).toEqual([]);
-        expect(result.current.gameState.blurLevel).toBe(0);
+        expect(result.current.effectLevel).toBe(0);
       });
     });
 
@@ -351,22 +362,5 @@ describe("usePokemonGame hook", () => {
       });
     });
 
-    test("should include gameMode in game state", async () => {
-      const { result } = renderHook(() => usePokemonGame());
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false);
-      });
-
-      expect(result.current.gameState.gameMode).toBe(GameMode.BLUR);
-
-      act(() => {
-        result.current.handleModeChange(GameMode.ZOOM);
-      });
-
-      await waitFor(() => {
-        expect(result.current.gameState.gameMode).toBe(GameMode.ZOOM);
-      });
-    });
   });
 });

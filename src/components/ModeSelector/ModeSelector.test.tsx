@@ -62,7 +62,7 @@ describe("ModeSelector Component", () => {
     expect(html).toContain("Mode Zoom");
   });
 
-  test("contains left arrow button", () => {
+  test("contains label", () => {
     const html = renderToStaticMarkup(
       <ModeSelector 
         currentMode={GameMode.BLUR} 
@@ -70,10 +70,10 @@ describe("ModeSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain('aria-label="Mode précédent"');
+    expect(html).toContain("Mode de Jeu");
   });
 
-  test("contains right arrow button", () => {
+  test("has select element", () => {
     const html = renderToStaticMarkup(
       <ModeSelector 
         currentMode={GameMode.BLUR} 
@@ -81,10 +81,10 @@ describe("ModeSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain('aria-label="Mode suivant"');
+    expect(html).toContain("mode-select");
   });
 
-  test("has correct layout structure", () => {
+  test("has description box", () => {
     const html = renderToStaticMarkup(
       <ModeSelector 
         currentMode={GameMode.BLUR} 
@@ -92,12 +92,21 @@ describe("ModeSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain("flex");
-    expect(html).toContain("items-center");
-    expect(html).toContain("justify-between");
+    expect(html).toContain("bg-muted");
   });
 
-  test("buttons are disabled when disabled prop is true", () => {
+  test("has space-y layout", () => {
+    const html = renderToStaticMarkup(
+      <ModeSelector 
+        currentMode={GameMode.BLUR} 
+        onModeChange={mockOnChange}
+        disabled={false}
+      />
+    );
+    expect(html).toContain("space-y-3");
+  });
+
+  test("select is disabled when disabled prop is true", () => {
     const html = renderToStaticMarkup(
       <ModeSelector 
         currentMode={GameMode.BLUR} 
@@ -106,40 +115,6 @@ describe("ModeSelector Component", () => {
       />
     );
     expect(html).toContain('disabled=""');
-  });
-
-  test("has responsive padding", () => {
-    const html = renderToStaticMarkup(
-      <ModeSelector 
-        currentMode={GameMode.BLUR} 
-        onModeChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("p-3");
-    expect(html).toContain("sm:p-4");
-  });
-
-  test("has centered text", () => {
-    const html = renderToStaticMarkup(
-      <ModeSelector 
-        currentMode={GameMode.BLUR} 
-        onModeChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("text-center");
-  });
-
-  test("buttons have icon size", () => {
-    const html = renderToStaticMarkup(
-      <ModeSelector 
-        currentMode={GameMode.BLUR} 
-        onModeChange={mockOnChange}
-        disabled={false}
-      />
-    );
-    expect(html).toContain("size-9");
   });
 
   test("applies custom className when provided", () => {
@@ -154,7 +129,7 @@ describe("ModeSelector Component", () => {
     expect(html).toContain("custom-class");
   });
 
-  test("has responsive text size", () => {
+  test("displays mode descriptions", () => {
     const html = renderToStaticMarkup(
       <ModeSelector 
         currentMode={GameMode.BLUR} 
@@ -162,20 +137,18 @@ describe("ModeSelector Component", () => {
         disabled={false}
       />
     );
-    expect(html).toContain("text-sm");
-    expect(html).toContain("sm:text-base");
+    expect(html).toContain("L&#x27;image devient plus claire à chaque tentative");
   });
 
-  test("buttons have outline styling", () => {
+  test("displays zoom mode description", () => {
     const html = renderToStaticMarkup(
       <ModeSelector 
-        currentMode={GameMode.BLUR} 
+        currentMode={GameMode.ZOOM} 
         onModeChange={mockOnChange}
         disabled={false}
       />
     );
-    expect(html).toContain("border-input");
-    expect(html).toContain("bg-background");
+    expect(html).toContain("L&#x27;image se dézoome à chaque tentative");
   });
 });
 

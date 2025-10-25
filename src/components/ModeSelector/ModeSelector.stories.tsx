@@ -79,7 +79,7 @@ export const Interactive: Story = {
             <strong>Current Mode:</strong> {mode === GameMode.BLUR ? 'Mode Flou' : 'Mode Zoom'}
           </p>
           <p className="text-xs text-muted-foreground mt-2">
-            Click the arrows to switch between modes
+            Use the dropdown to switch between modes
           </p>
         </div>
       </div>
@@ -100,7 +100,7 @@ export const ModeSwitching: Story = {
         <div className="text-center mb-4">
           <h3 className="text-lg font-semibold mb-2">Mode Selector Demo</h3>
           <p className="text-sm text-muted-foreground">
-            Use arrows to cycle between Blur and Zoom modes
+            Use the dropdown to select between Blur and Zoom modes
           </p>
         </div>
         <ModeSelector

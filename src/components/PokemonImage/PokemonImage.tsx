@@ -5,18 +5,16 @@ import { cn } from '@/lib/utils';
 
 interface PokemonImageProps {
   pokemon: Pokemon | null;
-  blurLevel: number; // 0-5, where 0 is fully blurred, 5 is clear
+  effectLevel: number; // 0-5, where 0 is maximum effect, 5 is clear/normal
   gameMode?: GameMode;
-  zoomLevel?: number; // 0-5, where 0 is fully zoomed in, 5 is normal
   gameOver?: boolean;
   className?: string;
 }
 
 export function PokemonImage({ 
   pokemon, 
-  blurLevel, 
+  effectLevel, 
   gameMode = GameMode.BLUR,
-  zoomLevel = 0,
   gameOver = false, 
   className 
 }: PokemonImageProps) {
@@ -32,11 +30,11 @@ export function PokemonImage({
 
   // Calculate blur intensity (0-20px blur)
   // If game is over, remove all blur
-  const blurIntensity = gameOver ? 0 : Math.max(0, 20 - (blurLevel * 4));
+  const blurIntensity = gameOver ? 0 : Math.max(0, 20 - (effectLevel * 4));
   
   // Calculate zoom scale (5x to 1x)
   // If game is over, show normal size
-  const zoomScale = gameOver ? 1 : (5 - zoomLevel) * 0.8 + 1;
+  const zoomScale = gameOver ? 1 : (5 - effectLevel) * 5;
 
   const imageStyle = gameMode === GameMode.BLUR 
     ? { filter: `blur(${blurIntensity}px)` }

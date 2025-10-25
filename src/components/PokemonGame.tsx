@@ -2,19 +2,21 @@ import { useState, useEffect } from 'react';
 import { usePokemonGame } from '@/hooks/usePokemonGame';
 import { GameStatus, GameMode } from '@/types/pokemon';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { Drawer } from '@/components/ui/drawer';
+import { GameMenu } from '@/components/GameMenu';
 import { CongratulationsModal } from './CongratulationsModal';
-import { GenerationSelectorButton } from './GenerationSelectorButton';
-import { ModeSelector } from './ModeSelector';
 import { AttemptDisplay } from './AttemptDisplay';
 import { PokemonImage } from './PokemonImage';
 import { GuessInput } from './GuessInput';
 import { GameOver } from './GameOver';
 import { PokemonInfos } from './PokemonInfos';
+import { Menu } from 'lucide-react';
 
 export function PokemonGame() {
   const {
     gameState,
+    effectLevel,
     selectedGeneration,
     gameMode,
     loading,
@@ -26,6 +28,7 @@ export function PokemonGame() {
   } = usePokemonGame();
 
   const [showCongratulations, setShowCongratulations] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleGuessSubmit = (guess: string) => {
     submitGuess(guess);
@@ -67,48 +70,47 @@ export function PokemonGame() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 px-4 sm:px-0">
-      {/* Game Header */}
+    <div className="w-full max-w-4xl mx-auto space-y-4 sm:space-y-6 px-2 sm:px-0">
+      {/* Compact Header with Menu Button */}
       <Card>
-        <CardHeader>
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="text-center sm:text-left">
-              <CardTitle className="text-xl sm:text-2xl">
-                🎮 Pokemon Guessing Game
-              </CardTitle>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                Devinez le Pokemon! Vous avez 5 tentatives.
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
-                {gameMode === GameMode.BLUR 
-                  ? "L'image devient plus claire à chaque tentative."
-                  : "L'image se dézoome à chaque tentative."}
-              </p>
-            </div>
-            <div className="flex justify-center sm:justify-end">
-              <GenerationSelectorButton
-                selectedGeneration={selectedGeneration}
-                onGenerationChange={handleGenerationChange}
-                disabled={loading}
-              />
-            </div>
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Ouvrir le menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <h1 className="text-lg sm:text-xl font-bold">🎮 Pokémon Guessing</h1>
+            <div className="w-9" /> {/* Spacer for centering */}
           </div>
-        </CardHeader>
+        </CardContent>
       </Card>
 
-      {/* Mode Selector */}
-      <ModeSelector 
-        currentMode={gameMode}
-        onModeChange={handleModeChange}
-        disabled={loading}
-      />
+      {/* Drawer Menu */}
+      <Drawer open={menuOpen} onOpenChange={setMenuOpen} side="left">
+        <GameMenu
+          gameMode={gameMode}
+          onModeChange={(mode) => {
+            handleModeChange(mode);
+            setMenuOpen(false);
+          }}
+          selectedGeneration={selectedGeneration}
+          onGenerationChange={(gen) => {
+            handleGenerationChange(gen);
+            setMenuOpen(false);
+          }}
+          disabled={loading}
+        />
+      </Drawer>
 
       {/* Pokemon Image */}
       <PokemonImage 
         pokemon={gameState.targetPokemon} 
-        blurLevel={gameState.blurLevel}
+        effectLevel={effectLevel}
         gameMode={gameMode}
-        zoomLevel={gameState.blurLevel}
         gameOver={gameState.status !== GameStatus.PLAYING}
       />
 

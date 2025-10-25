@@ -53,10 +53,11 @@ bun test --coverage
 ```
 
 The project includes comprehensive tests:
-- ✅ **20 tests** across 2 test files
-- ✅ **Component snapshot tests** (GameOver)
-- ✅ **Custom hook tests** (usePokemonGame)
-- ✅ **86 expect() calls** ensuring functionality
+- ✅ **125 tests** across 7 test files
+- ✅ **Component snapshot tests** (GameOver, PokemonImage, PokemonInfos, etc.)
+- ✅ **Custom hook tests** (usePokemonGame with mode switching)
+- ✅ **217 expect() calls** ensuring functionality
+- ✅ **28 snapshots** for UI regression testing
 
 ## 🚀 Deployment
 
@@ -79,11 +80,16 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
 ## 🎮 Game Features
 
 - **Wordle-style Gameplay**: Guess Pokemon names with color-coded feedback
-- **Generation Selector**: Choose from 9 Pokemon generations
-- **Progressive Image Reveal**: Image becomes clearer with each attempt
+- **Two Game Modes**: 
+  - 🌫️ **Blur Mode**: Image progressively unblurs with each guess
+  - 🔍 **Zoom Mode**: Image progressively zooms out from close-up
+- **Side Menu**: Hamburger menu with game settings and info
+- **Generation Selector**: Choose from 9 Pokemon generations (Gen I to Gen IX)
 - **5 Attempts**: Limited guesses for challenge
 - **French Localization**: All Pokemon names in French
-- **Responsive Design**: Works on mobile and desktop
+- **Accent-Insensitive**: Type without accents (e.g., "evoli" matches "évoli")
+- **Responsive Design**: Optimized for mobile and desktop
+- **Auto-Focus Input**: Keyboard-friendly gameplay
 
 ## 🏗️ Project Structure
 

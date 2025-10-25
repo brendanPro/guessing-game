@@ -6,128 +6,128 @@ import { mockCharizard, mockPikachu, mockMewtwo, mockGyarados } from './mock-dat
 
 
 describe("PokemonImage Component", () => {
-  test("snapshot with Pikachu fully blurred", () => {
+  test("snapshot with Pikachu maximum effect", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={0} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={0} gameOver={false} />
     );
     expect(html).toMatchSnapshot();
   });
 
-  test("snapshot with Pikachu half blurred", () => {
+  test("snapshot with Pikachu half effect", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={2} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={2} gameOver={false} />
     );
     expect(html).toMatchSnapshot();
   });
 
-  test("snapshot with Pikachu fully visible", () => {
+  test("snapshot with Pikachu no effect", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={5} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={5} gameOver={false} />
     );
     expect(html).toMatchSnapshot();
   });
 
   test("snapshot with Pikachu game over", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={0} gameOver={true} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={0} gameOver={true} />
     );
     expect(html).toMatchSnapshot();
   });
 
   test("snapshot with Charizard", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockCharizard} blurLevel={2} gameOver={false} />
+      <PokemonImage pokemon={mockCharizard} effectLevel={2} gameOver={false} />
     );
     expect(html).toMatchSnapshot();
   });
 
   test("snapshot with null pokemon (loading state)", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={null} blurLevel={0} gameOver={false} />
+      <PokemonImage pokemon={null} effectLevel={0} gameOver={false} />
     );
     expect(html).toMatchSnapshot();
   });
 
   test("displays loading state when pokemon is null", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={null} blurLevel={0} gameOver={false} />
+      <PokemonImage pokemon={null} effectLevel={0} gameOver={false} />
     );
     expect(html).toContain("Loading Pokemon...");
   });
 
   test("displays pokemon image when pokemon is provided", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={0} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={0} gameOver={false} />
     );
     expect(html).toContain(mockPikachu.sprites.front_default);
   });
 
   test("has correct alt text", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={0} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={0} gameOver={false} />
     );
     expect(html).toContain('alt="Pokemon to guess"');
   });
 
-  test("applies blur filter when blurLevel is 0", () => {
+  test("applies blur filter when effectLevel is 0", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={0} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={0} gameOver={false} />
     );
     expect(html).toContain("blur(20px)");
   });
 
-  test("applies less blur when blurLevel is 2", () => {
+  test("applies less blur when effectLevel is 2", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={2} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={2} gameOver={false} />
     );
     expect(html).toContain("blur(12px)");
   });
 
-  test("applies minimal blur when blurLevel is 4", () => {
+  test("applies minimal blur when effectLevel is 4", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={4} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={4} gameOver={false} />
     );
     expect(html).toContain("blur(4px)");
   });
 
-  test("applies no blur when blurLevel is 5", () => {
+  test("applies no blur when effectLevel is 5", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={5} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={5} gameOver={false} />
     );
     expect(html).toContain("blur(0px)");
   });
 
   test("removes all blur when gameOver is true", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={0} gameOver={true} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={0} gameOver={true} />
     );
     expect(html).toContain("blur(0px)");
   });
 
   test("displays Charizard sprite correctly", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockCharizard} blurLevel={2} gameOver={false} />
+      <PokemonImage pokemon={mockCharizard} effectLevel={2} gameOver={false} />
     );
     expect(html).toContain(mockCharizard.sprites.front_default);
   });
 
   test("displays Mewtwo sprite correctly", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockMewtwo} blurLevel={3} gameOver={false} />
+      <PokemonImage pokemon={mockMewtwo} effectLevel={3} gameOver={false} />
     );
     expect(html).toContain(mockMewtwo.sprites.front_default);
   });
 
   test("displays Gyarados sprite correctly", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockGyarados} blurLevel={1} gameOver={false} />
+      <PokemonImage pokemon={mockGyarados} effectLevel={1} gameOver={false} />
     );
     expect(html).toContain(mockGyarados.sprites.front_default);
   });
 
   test("has transition classes for smooth blur animation", () => {
     const html = renderToStaticMarkup(
-      <PokemonImage pokemon={mockPikachu} blurLevel={2} gameOver={false} />
+      <PokemonImage pokemon={mockPikachu} effectLevel={2} gameOver={false} />
     );
     expect(html).toContain("transition-all");
     expect(html).toContain("duration-500");
@@ -138,9 +138,8 @@ describe("PokemonImage Component", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={0}
         gameMode={GameMode.ZOOM}
-        zoomLevel={0}
         gameOver={false} 
       />
     );
@@ -151,9 +150,8 @@ describe("PokemonImage Component", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={2}
         gameMode={GameMode.ZOOM}
-        zoomLevel={2}
         gameOver={false} 
       />
     );
@@ -164,9 +162,8 @@ describe("PokemonImage Component", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={5}
         gameMode={GameMode.ZOOM}
-        zoomLevel={5}
         gameOver={false} 
       />
     );
@@ -177,48 +174,44 @@ describe("PokemonImage Component", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={0}
         gameMode={GameMode.ZOOM}
-        zoomLevel={0}
         gameOver={false} 
       />
     );
-    expect(html).toContain("transform:scale(5)");
+    expect(html).toContain("transform:scale(25)");
   });
 
   test("applies zoom transform when in zoom mode at level 2", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={2}
         gameMode={GameMode.ZOOM}
-        zoomLevel={2}
         gameOver={false} 
       />
     );
-    expect(html).toContain("transform:scale(3.4000000000000004)");
+    expect(html).toContain("transform:scale(15)");
   });
 
   test("applies zoom transform when in zoom mode at level 5", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={5}
         gameMode={GameMode.ZOOM}
-        zoomLevel={5}
         gameOver={false} 
       />
     );
-    expect(html).toContain("transform:scale(1)");
+    expect(html).toContain("transform:scale(0)");
   });
 
   test("removes zoom when game is over in zoom mode", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={0}
         gameMode={GameMode.ZOOM}
-        zoomLevel={0}
         gameOver={true} 
       />
     );
@@ -229,9 +222,8 @@ describe("PokemonImage Component", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={0}
         gameMode={GameMode.BLUR}
-        zoomLevel={0}
         gameOver={false} 
       />
     );
@@ -241,14 +233,13 @@ describe("PokemonImage Component", () => {
   test("applies zoom in zoom mode", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
-        pokemon={mockPikachu} 
-        blurLevel={0}
+        pokemon={mockPikachu}   
         gameMode={GameMode.ZOOM}
-        zoomLevel={0}
+        effectLevel={0}
         gameOver={false} 
       />
     );
-    expect(html).toContain("transform:scale(5)");
+    expect(html).toContain("transform:scale(25)");
     expect(html).not.toContain("blur");
   });
 
@@ -256,9 +247,8 @@ describe("PokemonImage Component", () => {
     const html = renderToStaticMarkup(
       <PokemonImage 
         pokemon={mockPikachu} 
-        blurLevel={0}
+        effectLevel={0}
         gameMode={GameMode.ZOOM}
-        zoomLevel={0}
         gameOver={false} 
       />
     );
