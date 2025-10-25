@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { usePokemonGame } from '@/hooks/usePokemonGame';
-import { GameStatus } from '@/types/pokemon';
+import { GameStatus, GameMode } from '@/types/pokemon';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CongratulationsModal } from './CongratulationsModal';
 import { GenerationSelectorButton } from './GenerationSelectorButton';
+import { ModeSelector } from './ModeSelector';
 import { AttemptDisplay } from './AttemptDisplay';
 import { PokemonImage } from './PokemonImage';
 import { GuessInput } from './GuessInput';
@@ -15,11 +16,13 @@ export function PokemonGame() {
   const {
     gameState,
     selectedGeneration,
+    gameMode,
     loading,
     error,
     submitGuess,
     restartGame,
     handleGenerationChange,
+    handleModeChange,
   } = usePokemonGame();
 
   const [showCongratulations, setShowCongratulations] = useState(false);
@@ -77,7 +80,9 @@ export function PokemonGame() {
                 Devinez le Pokemon! Vous avez 5 tentatives.
                 <br className="hidden sm:block" />
                 <span className="sm:hidden"> </span>
-                L'image devient plus claire à chaque tentative.
+                {gameMode === GameMode.BLUR 
+                  ? "L'image devient plus claire à chaque tentative."
+                  : "L'image se dézoome à chaque tentative."}
               </p>
             </div>
             <div className="flex justify-center sm:justify-end">
@@ -91,10 +96,19 @@ export function PokemonGame() {
         </CardHeader>
       </Card>
 
+      {/* Mode Selector */}
+      <ModeSelector 
+        currentMode={gameMode}
+        onModeChange={handleModeChange}
+        disabled={loading}
+      />
+
       {/* Pokemon Image */}
       <PokemonImage 
         pokemon={gameState.targetPokemon} 
         blurLevel={gameState.blurLevel}
+        gameMode={gameMode}
+        zoomLevel={gameState.blurLevel}
         gameOver={gameState.status !== GameStatus.PLAYING}
       />
 

@@ -37,12 +37,18 @@ export enum GameStatus {
   LOST = 'lost',
 }
 
+export enum GameMode {
+  BLUR = 'blur',
+  ZOOM = 'zoom',
+}
+
 export interface GameState {
   targetPokemon: Pokemon | null;
   attempts: string[];
   currentAttempt: string;
   status: GameStatus;
-  blurLevel: number; // 0-5, where 0 is fully blurred, 5 is clear
+  blurLevel: number; // 0-5, where 0 is fully blurred/zoomed, 5 is clear/normal
+  gameMode: GameMode;
 }
 
 export enum LetterState {

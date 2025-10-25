@@ -1,6 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { PokemonImage } from "./PokemonImage";
+import { GameMode } from "@/types/pokemon";
 import { mockCharizard, mockPikachu, mockMewtwo, mockGyarados } from './mock-data';
 
 
@@ -130,6 +131,138 @@ describe("PokemonImage Component", () => {
     );
     expect(html).toContain("transition-all");
     expect(html).toContain("duration-500");
+  });
+
+  // Zoom mode tests
+  test("snapshot with Pikachu in zoom mode fully zoomed", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={0}
+        gameOver={false} 
+      />
+    );
+    expect(html).toMatchSnapshot();
+  });
+
+  test("snapshot with Pikachu in zoom mode half zoomed", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={2}
+        gameOver={false} 
+      />
+    );
+    expect(html).toMatchSnapshot();
+  });
+
+  test("snapshot with Pikachu in zoom mode normal size", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={5}
+        gameOver={false} 
+      />
+    );
+    expect(html).toMatchSnapshot();
+  });
+
+  test("applies zoom transform when in zoom mode at level 0", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={0}
+        gameOver={false} 
+      />
+    );
+    expect(html).toContain("transform:scale(5)");
+  });
+
+  test("applies zoom transform when in zoom mode at level 2", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={2}
+        gameOver={false} 
+      />
+    );
+    expect(html).toContain("transform:scale(3.4000000000000004)");
+  });
+
+  test("applies zoom transform when in zoom mode at level 5", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={5}
+        gameOver={false} 
+      />
+    );
+    expect(html).toContain("transform:scale(1)");
+  });
+
+  test("removes zoom when game is over in zoom mode", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={0}
+        gameOver={true} 
+      />
+    );
+    expect(html).toContain("transform:scale(1)");
+  });
+
+  test("applies blur in blur mode", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.BLUR}
+        zoomLevel={0}
+        gameOver={false} 
+      />
+    );
+    expect(html).toContain("blur(20px)");
+  });
+
+  test("applies zoom in zoom mode", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={0}
+        gameOver={false} 
+      />
+    );
+    expect(html).toContain("transform:scale(5)");
+    expect(html).not.toContain("blur");
+  });
+
+  test("has transform-origin center in zoom mode", () => {
+    const html = renderToStaticMarkup(
+      <PokemonImage 
+        pokemon={mockPikachu} 
+        blurLevel={0}
+        gameMode={GameMode.ZOOM}
+        zoomLevel={0}
+        gameOver={false} 
+      />
+    );
+    expect(html).toContain("transform-origin:center");
   });
 });
 

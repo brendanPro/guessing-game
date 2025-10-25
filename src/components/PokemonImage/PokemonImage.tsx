@@ -1,16 +1,25 @@
 import React from 'react';
-import { type Pokemon } from '@/types/pokemon';
+import { type Pokemon, GameMode } from '@/types/pokemon';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface PokemonImageProps {
   pokemon: Pokemon | null;
   blurLevel: number; // 0-5, where 0 is fully blurred, 5 is clear
+  gameMode?: GameMode;
+  zoomLevel?: number; // 0-5, where 0 is fully zoomed in, 5 is normal
   gameOver?: boolean;
   className?: string;
 }
 
-export function PokemonImage({ pokemon, blurLevel, gameOver = false, className }: PokemonImageProps) {
+export function PokemonImage({ 
+  pokemon, 
+  blurLevel, 
+  gameMode = GameMode.BLUR,
+  zoomLevel = 0,
+  gameOver = false, 
+  className 
+}: PokemonImageProps) {
   if (!pokemon) {
     return (
       <Card className={cn("w-64 h-64 mx-auto", className)}>
@@ -25,6 +34,13 @@ export function PokemonImage({ pokemon, blurLevel, gameOver = false, className }
   // If game is over, remove all blur
   const blurIntensity = gameOver ? 0 : Math.max(0, 20 - (blurLevel * 4));
   
+  // Calculate zoom scale (5x to 1x)
+  // If game is over, show normal size
+  const zoomScale = gameOver ? 1 : (5 - zoomLevel) * 0.8 + 1;
+
+  const imageStyle = gameMode === GameMode.BLUR 
+    ? { filter: `blur(${blurIntensity}px)` }
+    : { transform: `scale(${zoomScale})`, transformOrigin: 'center' };
 
   return (
     <Card className={cn("w-full max-w-xs sm:max-w-sm mx-auto aspect-square overflow-hidden", className)}>
@@ -35,11 +51,9 @@ export function PokemonImage({ pokemon, blurLevel, gameOver = false, className }
             alt="Pokemon to guess"
             className={cn(
               "w-full h-full object-contain transition-all duration-500",
-              "filter"
+              gameMode === GameMode.BLUR && "filter"
             )}
-            style={{
-              filter: `blur(${blurIntensity}px)`,
-            }}
+            style={imageStyle}
           />
           
         </div>

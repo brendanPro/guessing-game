@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach, mock } from "bun:test";
-import { GameStatus, LetterState } from "@/types/pokemon";
+import { GameStatus, LetterState, GameMode } from "@/types/pokemon";
 import { usePokemonGame } from "./usePokemonGame";
 import { renderHook, waitFor, act  } from "@testing-library/react";
 import { DEFAULT_GENERATION } from "@/data/pokemonGenerations";
@@ -295,6 +295,77 @@ describe("usePokemonGame hook", () => {
         expect(result.current.gameState.attempts).toEqual([]);
         expect(result.current.gameState.currentAttempt).toBe("");
         expect(result.current.gameState.blurLevel).toBe(0);
+      });
+    });
+  });
+
+  describe("handle mode change", () => {
+    test("should change game mode and restart game", async () => {
+      const { result } = renderHook(() => usePokemonGame());
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      const initialPokemon = result.current.gameState.targetPokemon;
+      expect(result.current.gameMode).toBe(GameMode.BLUR);
+
+      act(() => {
+        result.current.handleModeChange(GameMode.ZOOM);
+      });
+
+      await waitFor(() => {
+        expect(result.current.gameMode).toBe(GameMode.ZOOM);
+        expect(result.current.gameState.status).toBe(GameStatus.PLAYING);
+        expect(result.current.gameState.attempts).toEqual([]);
+        expect(result.current.gameState.blurLevel).toBe(0);
+      });
+    });
+
+    test("should switch between blur and zoom modes", async () => {
+      const { result } = renderHook(() => usePokemonGame());
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      // Start with blur mode
+      expect(result.current.gameMode).toBe(GameMode.BLUR);
+
+      // Switch to zoom
+      act(() => {
+        result.current.handleModeChange(GameMode.ZOOM);
+      });
+
+      await waitFor(() => {
+        expect(result.current.gameMode).toBe(GameMode.ZOOM);
+      });
+
+      // Switch back to blur
+      act(() => {
+        result.current.handleModeChange(GameMode.BLUR);
+      });
+
+      await waitFor(() => {
+        expect(result.current.gameMode).toBe(GameMode.BLUR);
+      });
+    });
+
+    test("should include gameMode in game state", async () => {
+      const { result } = renderHook(() => usePokemonGame());
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false);
+      });
+
+      expect(result.current.gameState.gameMode).toBe(GameMode.BLUR);
+
+      act(() => {
+        result.current.handleModeChange(GameMode.ZOOM);
+      });
+
+      await waitFor(() => {
+        expect(result.current.gameState.gameMode).toBe(GameMode.ZOOM);
       });
     });
   });

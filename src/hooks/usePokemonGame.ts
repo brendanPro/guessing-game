@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { type Pokemon, type GameState, LetterState, GameStatus } from '@/types/pokemon';
+import { type Pokemon, type GameState, LetterState, GameStatus, GameMode } from '@/types/pokemon';
 import { type PokemonGeneration, DEFAULT_GENERATION } from '@/data/pokemonGenerations';
 
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2';
@@ -11,9 +11,11 @@ export function usePokemonGame() {
     currentAttempt: '',
     status: GameStatus.PLAYING,
     blurLevel: 0,
+    gameMode: GameMode.BLUR,
   });
 
   const [selectedGeneration, setSelectedGeneration] = useState<PokemonGeneration>(DEFAULT_GENERATION);
+  const [gameMode, setGameMode] = useState<GameMode>(GameMode.BLUR);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -62,13 +64,14 @@ export function usePokemonGame() {
         currentAttempt: '',
         status: GameStatus.PLAYING,
         blurLevel: 0,
+        gameMode: gameMode,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to initialize game');
     } finally {
       setLoading(false);
     }
-  }, [selectedGeneration]);
+  }, [selectedGeneration, gameMode]);
 
   // Normalize string by removing accents
   const normalizeString = (str: string): string => {
@@ -159,15 +162,23 @@ export function usePokemonGame() {
     // Game will automatically restart due to selectedGeneration dependency
   }, []);
 
+  // Handle mode change
+  const handleModeChange = useCallback((mode: GameMode) => {
+    setGameMode(mode);
+    restartGame();
+  }, [restartGame]);
+
   return {
     gameState,
     selectedGeneration,
+    gameMode,
     loading,
     error,
     submitGuess,
     updateCurrentAttempt,
     restartGame,
     handleGenerationChange,
+    handleModeChange,
     checkGuess,
   };
 }
