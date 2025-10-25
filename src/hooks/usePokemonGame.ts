@@ -10,7 +10,6 @@ export function usePokemonGame() {
     attempts: [],
     currentAttempt: '',
     status: GameStatus.PLAYING,
-    blurLevel: 0,
     gameMode: GameMode.BLUR,
   });
 
